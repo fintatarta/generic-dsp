@@ -10,3 +10,6 @@ gnatinspect.db
 obj/*.xml
 obj/*.cgpr
 obj/gnatinspect.*
+obj/*cswi
+obj/*bexch
+bin/[a-z]*

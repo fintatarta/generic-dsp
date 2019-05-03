@@ -14,6 +14,21 @@ package body DSP.Generic_Functions is
      new Ada.Unchecked_Deallocation (Object => Complex_Array,
                                      Name   => Complex_Array_Access);
 
+   ----------------
+   -- To_Complex --
+   ----------------
+
+   function To_Complex (X : Scalar_Array) return Complex_Array
+   is
+      Result : Complex_Array (X'Range);
+   begin
+      for K in X'Range loop
+         Result (K) := (X (K), 0.0);
+      end loop;
+
+      return Result;
+   end To_Complex;
+
    ------------
    -- Filter --
    ------------
@@ -58,6 +73,20 @@ package body DSP.Generic_Functions is
          Filter.Spec (K) := Impulse_Response (K);
       end loop;
    end Set;
+
+   ---------
+   -- Set --
+   ---------
+
+   procedure Set (Filter           : in out Complex_FIR;
+                  Impulse_Response : Scalar_Array)
+   is
+   begin
+      Filter.Set (To_Complex (Impulse_Response));
+   end Set;
+
+
+
 
    overriding procedure Finalize (Object : in out Complex_FIR)
    is
@@ -138,6 +167,42 @@ package body DSP.Generic_Functions is
       end loop;
    end Set;
 
+   ---------
+   -- Set --
+   ---------
+
+   procedure Set (Filter      : in out Complex_IIR;
+                  Numerator   : Complex_Array;
+                  Denominator : Complex_Array)
+   is
+      Tmp : Complex_IIR_Spec :=  (Num_Deg     => Numerator'Last,
+                                  Den_Deg     => Denominator'Last,
+                                  Numerator   => (others => (0.0, 0.0)),
+                                  Denominator => (others => (0.0, 0.0)));
+   begin
+      for K in Integer'Max (Tmp.Numerator'First, Numerator'First) .. Numerator'Last loop
+         Tmp.Numerator (K) := Numerator (K);
+      end loop;
+
+      for K in Integer'Max (Tmp.Denominator'First, Denominator'First) .. Denominator'Last loop
+         Tmp.Denominator (K) := Denominator (K);
+      end loop;
+
+      Filter.Set (Tmp);
+   end Set;
+
+   ---------
+   -- Set --
+   ---------
+
+   procedure Set (Filter      : in out Complex_IIR;
+                  Numerator   : Scalar_Array;
+                  Denominator : Scalar_Array)
+   is
+   begin
+      Filter.Set (To_Complex (Numerator), To_Complex (Denominator));
+   end Set;
+
    function Notch_Specs (Freq        : Normalized_Frequency;
                          Pole_Radius : Float;
                          Class       : Notch_Type := Stopband)
@@ -162,7 +227,7 @@ package body DSP.Generic_Functions is
                                        (1 => (-R * C, 0.0),
                                         2 => (R ** 2, 0.0)));
          when Passband =>
-            return Complex_IIR_Spec'(Num_Deg     => 2,
+            return Complex_IIR_Spec'(Num_Deg     => 1,
                                      Den_Deg     => 2,
                                      Numerator   =>
                                        (0 => (C * (1.0 - R), 0.0),

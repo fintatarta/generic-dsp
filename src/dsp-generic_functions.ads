@@ -12,6 +12,12 @@ package DSP.Generic_Functions is
    type Scalar_Array is array (Integer range <>) of Scalar_Type;
    type Complex_Array is array (Integer range <>) of Complex_Types.Complex;
 
+   function Delta_Signal (K : Integer) return Scalar_Type
+   is ((if K = 0 then 1.0 else 0.0));
+
+   function Delta_Signal (K : Integer) return Complex_Type
+   is (Complex_Type'(Delta_Signal (K), 0.0));
+
    type Complex_Filter_Type is limited interface;
 
    function Filter (Item  : in out Complex_Filter_Type;
@@ -33,6 +39,12 @@ package DSP.Generic_Functions is
 
    procedure Set (Filter           : in out Complex_FIR;
                   Impulse_Response : Complex_Array)
+     with
+       Pre => Filter.Is_Empty,
+       Post => not Filter.Is_Empty;
+
+   procedure Set (Filter           : in out Complex_FIR;
+                  Impulse_Response : Scalar_Array)
      with
        Pre => Filter.Is_Empty,
        Post => not Filter.Is_Empty;
@@ -59,6 +71,28 @@ package DSP.Generic_Functions is
      with
        Pre => Filter.Is_Empty,
        Post => not Filter.Is_Empty;
+
+   procedure Set (Filter      : in out Complex_IIR;
+                  Numerator   : Complex_Array;
+                  Denominator : Complex_Array)
+     with
+       Pre =>
+         Filter.Is_Empty
+         and Numerator'First >= 0
+         and Denominator'First >= 0,
+         Post =>
+           not Filter.Is_Empty;
+
+   procedure Set (Filter      : in out Complex_IIR;
+                  Numerator   : Scalar_Array;
+                  Denominator : Scalar_Array)
+     with Pre =>
+       Filter.Is_Empty
+       and Numerator'First >= 0
+       and Denominator'First >= 0,
+       Post =>
+         not Filter.Is_Empty;
+
 
    type Notch_Type is (Passband, Stopband);
 
