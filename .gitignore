@@ -7,3 +7,6 @@ obj/*.a*
 *.ali
 empty-loc.xml
 gnatinspect.db
+obj/*.xml
+obj/*.cgpr
+obj/gnatinspect.*
