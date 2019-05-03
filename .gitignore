@@ -1,0 +1,9 @@
+obj/*.ali
+obj/*.o
+obj/*.a*
+
+*~
+*.o
+*.ali
+empty-loc.xml
+gnatinspect.db
