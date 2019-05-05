@@ -19,7 +19,7 @@ package body DSP.Generic_Functions is
 
 
    function Notch_Specs (Freq        : Normalized_Frequency;
-                         Pole_Radius : Float;
+                         Pole_Radius : Stable_Radius;
                          Class       : Notch_Type := Stopband)
                          return Complex_IIR_Spec
    is
@@ -32,7 +32,7 @@ package body DSP.Generic_Functions is
    end Notch_Specs;
 
    function Notch_Specs (Freq        : Normalized_Frequency;
-                         Pole_Radius : Float;
+                         Pole_Radius : Stable_Radius;
                          Class       : Notch_Type := Stopband)
                          return Real_IIR_Spec
    is

@@ -1,6 +1,11 @@
 with Ada.Numerics.Generic_Complex_Types;
 with Dsp.Ring_Filters;
 
+--
+-- This package provides several (OK, only filters so far...) DSP functions
+-- It needs to be instantiated with a floating point type and a corresponding
+-- complex type.
+--
 generic
    type Scalar_Type is digits <>;
 
@@ -53,16 +58,40 @@ package DSP.Generic_Functions is
    type Notch_Type is (Passband, Stopband);
 
    function Notch_Specs (Freq        : Normalized_Frequency;
-                         Pole_Radius : Float;
+                         Pole_Radius : Stable_Radius;
                          Class       : Notch_Type := Stopband)
                          return Complex_IIR_Spec;
+   --
+   -- Return the specs of a notch filter tuned at the frequency  Freq
+   -- (normalized to sampling frequency, that is, Freq=0.5
+   -- is the Nyquist frequency).  Pole_Radius is the
+   -- radius of compensating poles. Depending on the value of Class
+   -- the filter will be a stopband (that is, it removes frequency
+   -- Freq) or a passband (that is, it leaves unchanged the component
+   -- at frequency Freq, while attenuating the others).
+   --
 
    function Notch_Specs (Freq        : Normalized_Frequency;
-                         Pole_Radius : Float;
+                         Pole_Radius : Stable_Radius;
                          Class       : Notch_Type := Stopband)
                          return Real_IIR_Spec;
+   --
+   -- Return the specs of a notch filter tuned at the frequency  Freq
+   -- (normalized to sampling frequency, that is, Freq=0.5
+   -- is the Nyquist frequency).  Pole_Radius is the
+   -- radius of compensating poles. Depending on the value of Class
+   -- the filter will be a stopband (that is, it removes frequency
+   -- Freq) or a passband (that is, it leaves unchanged the component
+   -- at frequency Freq, while attenuating the others).
+   --
 
    function Complexify (X : Real_Filters.Coefficient_Array)
-                        return Complex_Filters.Coefficient_Array;
+                        return Complex_Filters.Coefficient_Array
+     with
+       Post =>
+         X'First = Complexify'Result'First
+         and X'Last = Complexify'Result'Last;
+   -- Create a complex vector from a real one.  Quite handy in many
+   -- cases.
 
 end DSP.Generic_Functions;
