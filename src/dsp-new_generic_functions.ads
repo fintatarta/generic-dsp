@@ -28,6 +28,8 @@ package DSP.New_Generic_Functions is
 
    subtype Real_IIR_Spec is Real_Filters.Ring_IIR_Spec;
 
+   subtype Scalar_Array is Real_Filters.Sample_Array;
+
 
    package Complex_Filters is
      new Dsp.Ring_Filters (Sample_Type      => Complex_Type,
