@@ -1,7 +1,7 @@
 pragma Ada_2012;
 with Ada.Numerics.Elementary_Functions;
 
-package body DSP.New_Generic_Functions is
+package body DSP.Generic_Functions is
 
    function Complexify (X : Real_Filters.Coefficient_Array)
                         return Complex_Filters.Coefficient_Array
@@ -66,4 +66,4 @@ package body DSP.New_Generic_Functions is
                                      2 => R ** 2));
       end case;
    end Notch_Specs;
-end DSP.New_Generic_Functions;
+end DSP.Generic_Functions;

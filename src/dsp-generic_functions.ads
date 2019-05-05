@@ -6,7 +6,7 @@ generic
 
    with package Complex_Types is
      new Ada.Numerics.Generic_Complex_Types (Scalar_Type);
-package DSP.New_Generic_Functions is
+package DSP.Generic_Functions is
    subtype Complex_Type is Complex_Types.Complex;
    use type Complex_Types.Complex;
 
@@ -65,4 +65,4 @@ package DSP.New_Generic_Functions is
    function Complexify (X : Real_Filters.Coefficient_Array)
                         return Complex_Filters.Coefficient_Array;
 
-end DSP.New_Generic_Functions;
+end DSP.Generic_Functions;
